@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 from IPython.display import display
+import datetime
 
 
 pd.set_option('display.unicode.ambiguous_as_wide', True)
@@ -16,7 +17,10 @@ stock_rankings = []
 
 k = 1
 for i in soup.find_all('li', class_="List(n)"): # limit=2(option)
-    stock_name = i.find('div', class_='Lh(20px) Fw(600) Fz(16px) Ell').text
+    stock_name = i.find('div', class_='Lh(20px) Fw(600) Fz(16px) Ell')
+    if not stock_name:
+        stock_name = i.find('div', class_='W(100%) H(100%)')
+    stock_name = stock_name.text
     stock_number = i.find('span', class_='Fz(14px) C(#979ba7) Ell').text
     final_price = i.find('span', class_='Jc(fe) Fw(600) C(#fff) Px(6px) Py(2px) Bdrs(4px) Bgc($c-trend-up)')
     if not final_price:
@@ -29,6 +33,7 @@ for i in soup.find_all('li', class_="List(n)"): # limit=2(option)
     spread = i.find_all('span', class_='Jc(fe)')[2].text
     volume = i.find_all('span', class_='Jc(fe)')[3].text
     transaction_value = i.find_all('span', class_='Jc(fe)')[4].text
+    # print(stock_name)
 
     stock_infos = {
         'stock_name': stock_name,
@@ -64,4 +69,6 @@ df_rename = df.rename(
 )
 print(df_rename)
 # display(df_rename)
-df_rename.to_csv('df_renames.csv') # 存成csv
+
+today = datetime.datetime.today().strftime('%Y%m%d')
+df_rename.to_csv(f'df_renames{today}.csv') # 存成csv
