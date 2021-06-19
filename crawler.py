@@ -5,8 +5,8 @@ from IPython.display import display
 import datetime
 
 
-pd.set_option('display.unicode.ambiguous_as_wide', True)
-pd.set_option('display.unicode.east_asian_width', True)
+pd.set_option('display.max_rows', None) # 行
+pd.set_option('display.max_columns', None) # 列
 
 url = 'https://tw.stock.yahoo.com/rank/change-up'
 
